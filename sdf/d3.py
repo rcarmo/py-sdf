@@ -118,7 +118,7 @@ def sphere(radius=1, center=ORIGIN):
 
     Args:
         radius (int, optional): measure. Defaults to 1.
-        center (nd.array, optional): origin. Defaults to ORIGIN.
+        center (tuple, optional): origin. Defaults to ORIGIN.
     """
     def f(p):
         return _length(p - center) - radius
@@ -128,10 +128,12 @@ def sphere(radius=1, center=ORIGIN):
 @sdf3
 def plane(normal=UP, point=ORIGIN):
     """Plane
+    
+    An infinite plane, with the positive side being inside and the negative side being outside.
 
     Args:
-        normal (nd.array, optional): vector. Defaults to UP.
-        point (nd.array, optional): origin. Defaults to ORIGIN.
+        normal (tuple, optional): vector. Defaults to UP.
+        point (tuple, optional): origin. Defaults to ORIGIN.
     """
     normal = _normalize(normal)
 
@@ -142,6 +144,19 @@ def plane(normal=UP, point=ORIGIN):
 
 @sdf3
 def slab(x0=None, y0=None, z0=None, x1=None, y1=None, z1=None, k=None):
+    """Slab
+
+    Useful for cutting a shape on one or more axis-aligned planes.
+
+    Args:
+        x0 (float, optional): plane limit. Defaults to None.
+        y0 (float, optional): plane limit. Defaults to None.
+        z0 (float, optional): plane limit. Defaults to None.
+        x1 (float, optional): plane limit. Defaults to None.
+        y1 (float, optional): plane limit. Defaults to None.
+        z1 (float, optional): plane limit. Defaults to None.
+        k (float, optional): amount of smoothing to apply. Defaults to None.
+    """
     fs = []
     if x0 is not None:
         fs.append(plane(X, (x0, 0, 0)))
@@ -160,6 +175,16 @@ def slab(x0=None, y0=None, z0=None, x1=None, y1=None, z1=None, k=None):
 
 @sdf3
 def box(size=1, center=ORIGIN, a=None, b=None):
+    """Box
+
+    3D box with sides specified centered around center, with optional bounds.
+
+    Args:
+        size (float or tuple, optional): length(s) of side(s). Defaults to 1.
+        center (tuple, optional): origin. Defaults to ORIGIN.
+        a (tuple, optional): bounds corner. Defaults to None.
+        b (tuple, optional): bounding corner. Defaults to None.
+    """
     if a is not None and b is not None:
         a = np.array(a)
         b = np.array(b)
@@ -174,9 +199,15 @@ def box(size=1, center=ORIGIN, a=None, b=None):
 
     return f
 
-
 @sdf3
 def rounded_box(size, radius, center=ORIGIN):
+    """Rounded Box
+
+    Args:
+        size (tuple): length of sides
+        radius (float): radius of curvature
+        center (tuple, optional): origin. Defaults to ORIGIN.
+    """
     size = np.array(size)
 
     def f(p):
